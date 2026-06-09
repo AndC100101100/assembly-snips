@@ -36,7 +36,7 @@ warning: Error disabling address space randomization: Operation not permitted
 Breakpoint 1, 0x08049000 in _start ()
 (gdb) 
 ```
-we can see where we are in the code by typing `disas _start`, this allows us to see that code with an arrow to see what the next instruction would be:
+we can see where we are in the code by typing `disas _start`, this allows us to see the code with an arrow to see what the next instruction would be:
 ```bash
 (gdb) disas _start
 Dump of assembler code for function _start:
@@ -49,7 +49,7 @@ End of assembler dump.
 (gdb) 
 ```
 
-in the ouput we case see the first instructions being `mov edx,0xd`, where `0xd` is our hex value for 13.
+in the output we can see the first instructions being `mov edx,0xd`, where `0xd` is our hex value for 13.
 
 we can check the state of the registers with `info registers`:
 ```bash
@@ -80,7 +80,7 @@ k6             0x0                 0
 k7             0x0                 0
 ```
 
-at this point in execution we can see that our `edx` reguster is still 0, as this is before we execute.
+at this point in execution we can see that our `edx` register is still 0, as this is before we execute.
 
 We can run the next instruction with `nexti`, and recheck where we are again with `disas _start`:
 ```bash
@@ -96,7 +96,7 @@ Dump of assembler code for function _start:
 End of assembler dump.
 ```
 
-we can now now recheck our `edx` register again and we should see edx bow holding the value 13, but `eax` is still 0:
+we can now now recheck our `edx` register again and we should see `edx`  holding the value 13, but `eax` is still 0:
 ```bash
 (gdb) info registers
 eax            0x0                 0
