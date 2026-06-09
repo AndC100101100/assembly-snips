@@ -261,7 +261,7 @@ gdb) nexti
 Hello0x0804903a in printparam ()
 (gdb) 
 ```
-finally:
+finally we can see the line we care about:
 ```bash
 (gdb) nexti
 0x0804904a in _start ()
@@ -281,4 +281,45 @@ Dump of assembler code for function printparam:
    0x0804903c <+28>:    pop    ebp
    0x0804903d <+29>:    ret    
 End of assembler dump.
+```
+the code in funccalls.asm has the following line, `mov edx, [ebp + 8] ; String length parameter one`. pur gbd output shows, `mov edx,DWORD PTR [ebp+0x8]`
+
+before we call our function, we pushed 5 onto the top of the stack at `esp`.
+
+> Now that we have completed our function setup, ebp became the old value of esp. But you can't just reference ebp to get our parameter because remember, as part of the function setup, we pushed ebp onto the stack so the top of the stack is no longer our parameter.
+
+what we do instead is, reference ebp+8, which we do with the calc brackets.
+
+### why 8?
+we do +8 because of the stacks lay out. if ebp+0 is our based pointer, then ebp+4 is the first 32 bit address which stores the return pointer. therefore, ebp+8 ks the second 32 bit address which holds our first and only parameter
+
+```bash
+(gdb) nexti 
+0x0804904f in _start ()
+(gdb) info registers
+eax            0x5                 5
+ecx            0x804a000           134520832
+edx            0x5                 5
+ebx            0x0                 0
+esp            0xffcc80bc          0xffcc80bc
+ebp            0x0                 0x0
+esi            0x0                 0
+edi            0x0                 0
+eip            0x804904f           0x804904f <_start+17>
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x0                 0
+k0             0x0                 0
+k1             0x0                 0
+k2             0x0                 0
+k3             0x0                 0
+k4             0x0                 0
+k5             0x0                 0
+k6             0x0                 0
+k7             0x0                 0
+(gdb) 
 ```
